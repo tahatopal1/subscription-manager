@@ -4,9 +4,9 @@ This project is a high-traffic, fault-tolerant, and asynchronous Subscription Ma
 
 # Tech Stack
 - Java 21
-- Spring Boot 3.2.x
-- Database: PostgreSQL (JPA/Hibernate)
-- Messaging/Event Queue: RabbitMQ or Kafka (for asynchronous processes)
+- Spring Boot 3.5.x
+- Database: MySQL (JPA/Hibernate)
+- Messaging/Event Queue: RabbitMQ (for asynchronous processes)
 
 # Global Rules
 1. Every piece of code you write MUST adhere strictly to SOLID principles.

@@ -7,8 +7,9 @@ Subscriptions must strictly transition between these states: `PENDING`, `ACTIVE`
 - If a `PaymentFailedEvent` is received, the state must be updated to `CANCELLED`.
 
 ## 2. Auto-Renewal
-- Monthly renewal processes will be executed via a scheduled daily job (using Spring `@Scheduled` or Quartz).
+- Monthly renewal processes will be executed via a scheduled daily job (using Spring `@Scheduled`).
 - The job will identify `ACTIVE` subscriptions nearing their expiration date and dispatch a new payment request event to the Payment Service.
+- If the renewal process did not succeed, then the subscription MUST be set to `SUSPENDED`
 
 ## 3. Cancellation
 - When a user cancels an active subscription, its status is set to `CANCELLED`.

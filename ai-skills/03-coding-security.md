@@ -1,15 +1,14 @@
-# Domain Rules & Business Logic
+# Coding Standards & Security
 
-## 1. Subscription States
-Subscriptions must strictly transition between these states: `PENDING`, `ACTIVE`, `CANCELLED`, or `SUSPENDED`.
-- When a new subscription is created, its state MUST be set to `PENDING`.
-- The state should be updated to `ACTIVE` ONLY after a `PaymentCompletedEvent` (Success) is received.
-- If a `PaymentFailedEvent` is received, the state must be updated to `CANCELLED`.
+## 1. Exception Handling
+- Do not scatter `try-catch` blocks throughout the business logic.
+- Create a global `@RestControllerAdvice` to handle all application exceptions (e.g., `BusinessException`, `NotFoundException`) centrally.
+- Error responses returned to the client must follow a standardized JSON format (e.g., an `ApiError` wrapper object).
 
-## 2. Auto-Renewal
-- Monthly renewal processes will be executed via a scheduled daily job (using Spring `@Scheduled` or Quartz).
-- The job will identify `ACTIVE` subscriptions nearing their expiration date and dispatch a new payment request event to the Payment Service.
+## 2. Logging
+- Implement comprehensive logging across all critical business flows using SLF4J (Lombok `@Slf4j`).
+- STRICTLY mask or exclude PII (Personally Identifiable Information) such as credit card numbers, CVVs, or plain-text passwords from all application logs.
+- Logs must include a `correlationId` (using MDC - Mapped Diagnostic Context) to trace a single request across multiple asynchronous services.
 
-## 3. Cancellation
-- When a user cancels an active subscription, its status is set to `CANCELLED`.
-- Cancelled subscriptions must be permanently excluded from all future auto-renewal cycles. No further charges should be attempted.
+## 3. Data Validation
+- Validate all incoming HTTP request payloads at the Controller level using `@Valid` and Jakarta Validation annotations (e.g., `@NotNull`, `@Size`, `@Email`).
