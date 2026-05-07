@@ -12,3 +12,6 @@ This project is a high-traffic, fault-tolerant, and asynchronous Subscription Ma
 1. Every piece of code you write MUST adhere strictly to SOLID principles.
 2. NEVER write business logic inside the Controller layer. Delegate all business rules to the Service layer.
 3. Always refer to the files in the `/ai-skills/` folder for Architecture, Domain, and Security constraints before generating code.
+4. NEVER catch the generic `Exception.class` or `RuntimeException.class` without first explicitly handling framework-level routing and validation exceptions.
+5. Standard HTTP routing exceptions (e.g., NoResourceFoundException, HttpRequestMethodNotSupportedException, HttpMediaTypeNotSupportedException) MUST return their semantically correct HTTP status codes (404, 405, 415), NOT 500 Internal Server Error.
+6. When accessing the authenticated user within web controllers, NEVER use static SecurityContextHolder methods; ALWAYS inject the user directly via the @AuthenticationPrincipal CustomUserDetails method parameter to ensure testability and loose coupling.
