@@ -15,86 +15,36 @@ import org.springframework.data.domain.Pageable;
  */
 public interface UserService {
 
-    /**
-     * Retrieves the profile of the currently authenticated user.
-     *
-     * @param userId the UUID of the authenticated user
-     * @return the user profile
-     */
-    UserResponse getProfile(String userId);
+    /** Retrieves the profile of the currently authenticated user. */
+    UserResponse getProfile(Long userId);
 
-    /**
-     * Retrieves a specific user by their ID.
-     *
-     * @param userId the UUID of the user
-     * @return the user profile
-     */
-    UserResponse getUser(String userId);
+    /** Retrieves a specific user by their ID. */
+    UserResponse getUser(Long userId);
 
-    /**
-     * Updates the profile of the currently authenticated user.
-     *
-     * @param userId the UUID of the authenticated user
-     * @param request the updated fields
-     * @return the updated user profile
-     */
-    UserResponse updateProfile(String userId, UpdateProfileRequest request);
+    /** Updates the profile of the currently authenticated user. */
+    UserResponse updateProfile(Long userId, UpdateProfileRequest request);
 
-    /**
-     * Renews the password for the currently authenticated user.
-     *
-     * @param userId the UUID of the authenticated user
-     * @param request the password renewal payload
-     */
-    void renewPassword(String userId, UserPasswordUpdateRequest request);
+    /** Renews the password for the currently authenticated user. */
+    void renewPassword(Long userId, UserPasswordUpdateRequest request);
 
-    /**
-     * Searches users dynamically and returns paginated results.
-     *
-     * @param request search filters
-     * @param pageable pagination parameters
-     * @return paginated user profiles
-     */
+    /** Searches users dynamically and returns paginated results. */
     Page<UserResponse> searchUsers(UserSearchRequest request, Pageable pageable);
 
-    /**
-     * Creates a new user by an admin.
-     *
-     * @param request the details of the new user
-     * @return the created user profile
-     */
+    /** Creates a new user by an admin. */
     UserResponse createUser(AdminUserCreateRequest request);
 
-    /**
-     * Replaces a user's entire entity details (email, names, roles, etc).
-     *
-     * @param userId  target user's UUID
-     * @param request new full state of the user
-     * @return updated user profile
-     */
-    UserResponse updateUser(String userId, AdminUserUpdateRequest request);
+    /** Replaces a user's entire entity details (email, names, roles, etc). */
+    UserResponse updateUser(Long userId, AdminUserUpdateRequest request);
 
-    /**
-     * Updates the password for a user.
-     *
-     * @param userId target user's UUID
-     * @param request the new password
-     */
-    UserResponse updateUserPassword(String userId, AdminPasswordUpdateRequest request);
+    /** Updates the password for a user. */
+    UserResponse updateUserPassword(Long userId, AdminPasswordUpdateRequest request);
 
     /**
      * Toggles the isLocked flag on a user account.
-     * Locking prevents the user from obtaining new JWTs (spec §5).
-     *
-     * @param userId target user's UUID
-     * @return updated user profile
+     * Locking prevents the user from obtaining new JWTs.
      */
-    UserResponse toggleUserLock(String userId);
+    UserResponse toggleUserLock(Long userId);
 
-    /**
-     * Hard-deletes a user for GDPR compliance and publishes a UserDeletedEvent to RabbitMQ.
-     *
-     * @param userId target user's UUID
-     */
-    void deleteUser(String userId);
+    /** Hard-deletes a user for GDPR compliance. */
+    void deleteUser(Long userId);
 }

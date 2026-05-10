@@ -10,7 +10,7 @@ import java.util.Set;
  * NEVER includes password — this is a read-only projection safe for API responses.
  */
 public record UserResponse(
-        String id,
+        Long id,
         String email,
         String name,
         String surname,

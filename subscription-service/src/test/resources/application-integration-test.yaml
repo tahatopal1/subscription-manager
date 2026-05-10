@@ -1,0 +1,37 @@
+# Integration test configuration
+# All datasource / redis / rabbitmq values are overridden by Testcontainers at runtime via dynamic properties.
+
+spring:
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    open-in-view: false
+
+  rabbitmq:
+    # Testcontainers overrides host/port via @DynamicPropertySource
+    username: guest
+    password: guest
+    virtual-host: /
+    publisher-confirm-type: correlated
+    publisher-returns: true
+
+logging:
+  level:
+    com.project.subscription: DEBUG
+    org.springframework.amqp: WARN
+    org.flywaydb: INFO
+    org.testcontainers: WARN
+
+jwt:
+  secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+  expiration: 86400000
+
+management:
+  tracing:
+    sampling:
+      probability: 0.0

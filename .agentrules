@@ -14,4 +14,24 @@ This project is a high-traffic, fault-tolerant, and asynchronous Subscription Ma
 3. Always refer to the files in the `/ai-skills/` folder for Architecture, Domain, and Security constraints before generating code.
 4. NEVER catch the generic `Exception.class` or `RuntimeException.class` without first explicitly handling framework-level routing and validation exceptions.
 5. Standard HTTP routing exceptions (e.g., NoResourceFoundException, HttpRequestMethodNotSupportedException, HttpMediaTypeNotSupportedException) MUST return their semantically correct HTTP status codes (404, 405, 415), NOT 500 Internal Server Error.
-6. When accessing the authenticated user within web controllers, NEVER use static SecurityContextHolder methods; ALWAYS inject the user directly via the @AuthenticationPrincipal CustomUserDetails method parameter to ensure testability and loose coupling.
+6. Always prefer Java Enums over Strings for fixed sets of constants (like event types or statuses) to ensure type safety and prevent invalid data entry.
+7. When accessing the authenticated user within web controllers, NEVER use static SecurityContextHolder methods; ALWAYS inject the user directly via the Principal parameter to ensure testability and loose coupling.
+8. Always instead of 'getAll', use a paginated search using a Custom Repository and JPA Criteria API; ensure the service layer transforms the result into a 'Page' object containing total elements and page metadata.
+
+# Testing Architecture & Standards
+When writing or modifying tests, you MUST adhere to the following layer-specific testing strategies:
+
+1. SERVICE LAYER (Unit Testing):
+   - MUST use `@ExtendWith(SpringExtension.class)` and `@ContextConfiguration(classes = {Target.class})`.
+   - NEVER use `@SpringBootTest`.
+   - All dependencies of the target service MUST be mocked using `@MockBean`.
+
+2. REPOSITORY LAYER (Data Slice Testing):
+   - MUST use `@DataJpaTest`.
+   - MUST test against a real database instance using Testcontainers (e.g., PostgreSQL/MySQL container). NEVER fallback to in-memory databases like H2 to avoid syntax mismatches.
+   - Disable default test database replacement by adding `@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)`.
+
+3. CONTROLLER LAYER (Integration Testing):
+   - MUST be written as full context integration tests using `@SpringBootTest` and `@AutoConfigureMockMvc`.
+   - MUST rely on Testcontainers for infrastructure dependencies (Database, Redis, RabbitMQ).
+   - Assertions MUST verify HTTP status codes, JSON payload structures, and the resulting state of the database.

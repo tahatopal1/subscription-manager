@@ -3,64 +3,53 @@ _format_version: "3.0"
 services:
 
   # ── auth-service (port 8070) ──────────────────────────────────────────────
-  # Controllers: AuthController, UserController, UserAdminController
   - name: auth-service
     host: auth-upstream
     routes:
-      - name: auth-route           # POST /api/auth/register, POST /api/auth/login
+      - name: auth-route
         paths:
           - /api/auth
         strip_path: false
-
-      - name: auth-users-route     # GET /api/users, PUT /api/users, PATCH /api/users/password
+      - name: auth-users-route
         paths:
           - /api/users
         strip_path: false
-
-      - name: auth-admin-users-route  # GET|POST|PUT|PATCH|DELETE /api/admin/users/**
+      - name: auth-admin-users-route
         paths:
           - /api/admin/users
         strip_path: false
 
   # ── subscription-service (port 8072) ─────────────────────────────────────
-  # Controllers: SubscriptionController, AdminSubscriptionController
   - name: subscription-service
     host: sub-upstream
     routes:
-      - name: sub-route            # POST|GET /api/subscriptions, PUT /{id}/cancel,
-                                   # POST /retry, POST /{id}/reactivate
+      - name: sub-route
         paths:
           - /api/subscriptions
         strip_path: false
-
-      - name: sub-admin-route      # GET|POST|PUT /api/admin/subscriptions/**
+      - name: sub-admin-route
         paths:
           - /api/admin/subscriptions
         strip_path: false
 
   # ── payment-service (port 8071) ──────────────────────────────────────────
-  # Controllers: PaymentController, AdminPaymentController
   - name: payment-service
     host: pay-upstream
     routes:
-      - name: pay-route            # GET|POST|DELETE /api/payments/methods,
-                                   # GET /api/payments/transactions
+      - name: pay-route
         paths:
           - /api/payments
         strip_path: false
-
-      - name: pay-admin-route      # GET /api/admin/payments/transactions
+      - name: pay-admin-route
         paths:
           - /api/admin/payments
         strip_path: false
 
   # ── notification-service (port 8073) ─────────────────────────────────────
-  # Controllers: AdminNotificationController
   - name: notification-service
     host: notif-upstream
     routes:
-      - name: notif-admin-route    # POST /api/admin/notifications/send-custom,
-                                   # POST /api/admin/notifications/{id}/resend
+      - name: notif-admin-route
         paths:
           - /api/admin/notifications
         strip_path: false
@@ -68,16 +57,16 @@ services:
 upstreams:
   - name: auth-upstream
     targets:
-      - target: host.docker.internal:8070
+      - target: auth-service:8070
   - name: sub-upstream
     targets:
-      - target: host.docker.internal:8072
+      - target: subscription-service:8072
   - name: pay-upstream
     targets:
-      - target: host.docker.internal:8071
+      - target: payment-service:8071
   - name: notif-upstream
     targets:
-      - target: host.docker.internal:8073
+      - target: notification-service:8073
 
 plugins:
   - name: correlation-id
@@ -90,6 +79,6 @@ plugins:
     config:
       minute: 10
       policy: redis
-      redis_host: local-redis # Matches your docker-compose service name
+      redis_host: local-redis
       redis_port: 6379
       redis_password: redispass

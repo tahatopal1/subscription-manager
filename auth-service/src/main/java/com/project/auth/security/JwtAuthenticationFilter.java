@@ -22,10 +22,8 @@ import java.util.stream.Collectors;
 
 /**
  * JWT authentication filter that runs once per request.
- * Extracts and validates the Bearer token, then populates the SecurityContext.
- *
- * Per spec §4: this service generates JWTs; Kong validates them for downstream services.
- * Within this service we still validate the JWT to protect admin endpoints.
+ * Extracts and validates the Bearer token, then populates the SecurityContext
+ * with a {@link CustomUserDetails} principal carrying the typed Long user ID.
  */
 @Slf4j
 @Component
@@ -33,7 +31,7 @@ import java.util.stream.Collectors;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String BEARER_PREFIX = "Bearer ";
+    private static final String BEARER_PREFIX        = "Bearer ";
 
     private final JwtService jwtService;
 
@@ -49,7 +47,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             Claims claims = jwtService.extractAllClaims(token);
-            String userId = claims.getSubject();
+
+            // The JWT subject is the user's Long ID stored as a string.
+            Long userId = Long.valueOf(claims.getSubject());
 
             @SuppressWarnings("unchecked")
             List<String> roles = claims.get("roles", List.class);
@@ -59,8 +59,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             .map(SimpleGrantedAuthority::new)
                             .collect(Collectors.toList());
 
+            // Build a typed principal — no string parsing needed in controllers or services.
+            CustomUserDetails principal = new CustomUserDetails(
+                    userId, claims.getSubject(), null, authorities, true);
+
             var authentication = new UsernamePasswordAuthenticationToken(
-                    userId, null, authorities);
+                    principal, null, authorities);
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);

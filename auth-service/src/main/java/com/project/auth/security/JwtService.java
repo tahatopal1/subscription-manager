@@ -39,7 +39,7 @@ public class JwtService {
         long now = System.currentTimeMillis();
 
         return Jwts.builder()
-                .subject(user.getId())
+                .subject(String.valueOf(user.getId()))
                 .claim("roles", List.copyOf(user.getRoles()))
                 .issuedAt(new Date(now))
                 .expiration(new Date(now + expirationMs))

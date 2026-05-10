@@ -1,0 +1,226 @@
+services:
+  # ─── 1. DATABASES ────────────────────────────────────────────────────────
+  auth-mysql:
+    image: mysql:8
+    container_name: auth-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=auth_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - auth_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  subscriptions-mysql:
+    image: mysql:8
+    container_name: subscriptions-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=subscriptions_db
+    ports:
+      - "3308:3306"
+    volumes:
+      - sub_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  payments-mysql:
+    image: mysql:8
+    container_name: payments-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=payments_db
+    ports:
+      - "3309:3306"
+    volumes:
+      - pay_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  notifications-mysql:
+    image: mysql:8
+    container_name: notifications-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=notifications_db
+    ports:
+      - "3310:3306"
+    volumes:
+      - notif_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ─── 2. MESSAGE BROKER ───────────────────────────────────────────────────
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: my-rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rmq_data:/var/lib/rabbitmq
+
+  # ─── 3. CACHE (MUTUAL) ───────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: local-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass "redispass"
+    volumes:
+      - redis_data:/data
+
+  # ─── 4. PLG LOGGING STACK ────────────────────────────────────────────────
+  loki:
+    image: grafana/loki:2.9.2
+    container_name: local-loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - loki_data:/loki
+
+  promtail:
+    image: grafana/promtail:2.9.2
+    container_name: local-promtail
+    user: root
+    volumes:
+      - /var/log:/var/log
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./promtail-config.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: local-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+  # ─── 5. API GATEWAY ──────────────────────────────────────────────────────
+  kong:
+    image: kong:latest
+    container_name: local-gateway
+    user: root
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /kong/declarative/kong.yml
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+    ports:
+      - "8000:8000" # Main Proxy Port
+      - "8001:8001" # Admin Port
+    volumes:
+      - ./kong.yml:/kong/declarative/kong.yml
+
+  # ─── 6. MICROSERVICES ────────────────────────────────────────────────────
+  auth-service:
+    build: ./auth-service
+    image: auth-service:latest
+    container_name: auth-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://auth-mysql:3306/auth_db
+      - SPRING_RABBITMQ_HOST=my-rabbitmq
+      - SPRING_DATA_REDIS_HOST=local-redis
+      - LOKI_URL=http://local-loki:3100/loki/api/v1/push
+    expose:
+      - "8070"
+    depends_on:
+      auth-mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+      redis:
+        condition: service_started
+
+  subscription-service:
+    build: ./subscription-service
+    image: subscription-service:latest
+    container_name: subscription-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://subscriptions-mysql:3306/subscriptions_db
+      - SPRING_RABBITMQ_HOST=my-rabbitmq
+      - SPRING_DATA_REDIS_HOST=local-redis
+      - LOKI_URL=http://local-loki:3100/loki/api/v1/push
+    expose:
+      - "8072"
+    depends_on:
+      subscriptions-mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+      redis:
+        condition: service_started
+
+  payment-service:
+    build: ./payment-service
+    image: payment-service:latest
+    container_name: payment-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://payments-mysql:3306/payments_db
+      - SPRING_RABBITMQ_HOST=my-rabbitmq
+      - SPRING_DATA_REDIS_HOST=local-redis
+      - LOKI_URL=http://local-loki:3100/loki/api/v1/push
+    expose:
+      - "8071"
+    depends_on:
+      payments-mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+      redis:
+        condition: service_started
+
+  notification-service:
+    build: ./notification-service
+    image: notification-service:latest
+    container_name: notification-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://notifications-mysql:3306/notifications_db
+      - SPRING_RABBITMQ_HOST=my-rabbitmq
+      - SPRING_DATA_REDIS_HOST=local-redis
+      - LOKI_URL=http://local-loki:3100/loki/api/v1/push
+    expose:
+      - "8073"
+    depends_on:
+      notifications-mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+      redis:
+        condition: service_started
+
+volumes:
+  auth_db_data:
+  sub_db_data:
+  pay_db_data:
+  notif_db_data:
+  rmq_data:
+  redis_data:
+  loki_data:
+  grafana_data:

@@ -37,7 +37,7 @@ public class UserAdminController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUser(@PathVariable String id) {
+    public ResponseEntity<UserResponse> getUser(@PathVariable Long id) {
         log.info("Admin request to get user details for user ID: {}", id);
         UserResponse response = userService.getUser(id);
         return ResponseEntity.ok(response);
@@ -52,7 +52,7 @@ public class UserAdminController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(
-            @PathVariable String id,
+            @PathVariable Long id,
             @Valid @RequestBody AdminUserUpdateRequest request) {
         log.info("Admin request to update user details for user ID: {}", id);
         UserResponse response = userService.updateUser(id, request);
@@ -61,7 +61,7 @@ public class UserAdminController {
 
     @PatchMapping("/{id}/password")
     public ResponseEntity<UserResponse> updatePassword(
-            @PathVariable String id,
+            @PathVariable Long id,
             @Valid @RequestBody AdminPasswordUpdateRequest request) {
         log.info("Admin request to update password for user ID: {}", id);
         UserResponse response = userService.updateUserPassword(id, request);
@@ -69,14 +69,14 @@ public class UserAdminController {
     }
 
     @PatchMapping("/{id}/lock")
-    public ResponseEntity<UserResponse> toggleLock(@PathVariable String id) {
+    public ResponseEntity<UserResponse> toggleLock(@PathVariable Long id) {
         log.info("Admin request to toggle lock for user ID: {}", id);
         UserResponse response = userService.toggleUserLock(id);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         log.info("Admin request to delete user ID: {}", id);
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();

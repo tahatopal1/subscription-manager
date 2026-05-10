@@ -3,7 +3,6 @@ package com.project.auth.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Version;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -14,7 +13,7 @@ import java.time.Instant;
 
 /**
  * Base auditing superclass for all JPA entities.
- * Per 04-data-layer.md: provides createdAt, updatedAt and @Version for optimistic locking.
+ * Provides createdAt and updatedAt timestamps via Spring Data JPA auditing.
  */
 @Getter
 @Setter
@@ -30,7 +29,4 @@ public abstract class BaseEntity {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
-    @Version
-    @Column(name = "version", nullable = false)
-    private Long version;
 }
