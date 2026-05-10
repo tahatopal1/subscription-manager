@@ -35,3 +35,12 @@ management:
   tracing:
     sampling:
       probability: 1.0
+
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  default-produces-media-type: application/json
+  servers:
+    - url: http://localhost:8000
+      description: Kong API Gateway

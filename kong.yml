@@ -18,6 +18,13 @@ services:
         paths:
           - /api/admin/users
         strip_path: false
+      - name: auth-swagger-ui
+        paths:
+          - /auth/swagger-ui
+          - /auth/swagger-ui.html
+          - /auth/v3/api-docs
+          - /auth/webjars
+        strip_path: true
 
   # ── subscription-service (port 8072) ─────────────────────────────────────
   - name: subscription-service
@@ -31,6 +38,13 @@ services:
         paths:
           - /api/admin/subscriptions
         strip_path: false
+      - name: sub-swagger-ui
+        paths:
+          - /subscription/swagger-ui
+          - /subscription/swagger-ui.html
+          - /subscription/v3/api-docs
+          - /subscription/webjars
+        strip_path: true
 
   # ── payment-service (port 8071) ──────────────────────────────────────────
   - name: payment-service
@@ -44,6 +58,13 @@ services:
         paths:
           - /api/admin/payments
         strip_path: false
+      - name: pay-swagger-ui
+        paths:
+          - /payment/swagger-ui
+          - /payment/swagger-ui.html
+          - /payment/v3/api-docs
+          - /payment/webjars
+        strip_path: true
 
   # ── notification-service (port 8073) ─────────────────────────────────────
   - name: notification-service
@@ -53,6 +74,13 @@ services:
         paths:
           - /api/admin/notifications
         strip_path: false
+      - name: notif-swagger-ui
+        paths:
+          - /notification/swagger-ui
+          - /notification/swagger-ui.html
+          - /notification/v3/api-docs
+          - /notification/webjars
+        strip_path: true
 
 upstreams:
   - name: auth-upstream
