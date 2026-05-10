@@ -20,17 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-/**
- * Spring Security configuration for the auth-service.
- * <p>
- * Rules applied (auth-service spec §4): - SessionCreationPolicy.STATELESS: no HTTP sessions are
- * created. - /api/auth/register and /api/auth/login are explicitly permitAll(). - All other
- * endpoints require authentication. - @EnableMethodSecurity enables @PreAuthorize on admin
- * endpoints (spec §5).
- * <p>
- * Security rules (auth-service spec §1): - BCrypt is configured here as the single PasswordEncoder
- * for the entire service.
- */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity

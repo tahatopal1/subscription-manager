@@ -13,16 +13,6 @@ import org.springframework.transaction.event.TransactionalEventListener;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * Sends a notification to the notification-service after a subscription transaction commits.
- *
- * Binding: {@link TransactionPhase#AFTER_COMMIT} — the message is only dispatched once the
- * database write is durable, eliminating false notifications on rollbacks.
- *
- * The RabbitMQ payload mirrors the {@code NotificationEvent} contract expected by the
- * notification-service's single queue. {@code source} and {@code channel} are plain strings
- * owned by this service — the notification-service is agnostic and treats them as opaque.
- */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -48,7 +38,6 @@ public class SubscriptionNotificationListener {
         log.info("📤 Notification dispatched: userId={}, channel={}", response.userId(), channel);
     }
 
-    // ── Message factory ────────────────────────────────────────────────────
 
     private String buildMessage(String channel, Object subscriptionId) {
         String template = switch (channel) {

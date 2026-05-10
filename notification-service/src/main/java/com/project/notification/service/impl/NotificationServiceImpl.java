@@ -39,13 +39,11 @@ public class NotificationServiceImpl implements NotificationService {
   private static final String IDEMPOTENCY_KEY_PREFIX = "idempotency:notification:";
   private static final long IDEMPOTENCY_TTL_DAYS = 15;
 
-  // ── Trigger Vector 1: Async Event ──────────────────────────────────────
 
   @Override
   @Transactional
   public void processEventNotification(NotificationEvent event) {
 
-    // Redisson idempotency guard — if this key was already processed, skip silently.
     RBucket<Boolean> idempotencyBucket = redissonClient
         .getBucket(
             String.format("%s-%s-%s-%s", IDEMPOTENCY_KEY_PREFIX, event.eventId(), event.userId(),
@@ -74,7 +72,6 @@ public class NotificationServiceImpl implements NotificationService {
     dispatch(notification);
   }
 
-  // ── Trigger Vector 2a: Admin — Custom Send ─────────────────────────────
 
   @Override
   @Transactional
@@ -95,7 +92,6 @@ public class NotificationServiceImpl implements NotificationService {
     return NotificationResponse.from(notification);
   }
 
-  // ── Trigger Vector 2b: Admin — Resend ─────────────────────────────────
 
   @Override
   @Transactional
@@ -114,7 +110,6 @@ public class NotificationServiceImpl implements NotificationService {
     return NotificationResponse.from(notification);
   }
 
-  // ── Trigger Vector 3: Scheduled Retry ─────────────────────────────────
 
   @Override
   @Transactional
@@ -137,13 +132,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
   }
 
-  // ── Shared Dispatch Helper ─────────────────────────────────────────────
 
-  /**
-   * Calls the provider and updates status in-place. This method is intentionally not @Transactional
-   * itself — it always runs within the calling method's transaction so entity state changes are
-   * flushed together.
-   */
   private void dispatch(Notification notification) {
     try {
       notificationProvider.send(

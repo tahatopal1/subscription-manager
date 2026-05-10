@@ -6,17 +6,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 
-/**
- * Transactional Outbox table entry for the payment-service.
- *
- * Written atomically with the domain entity update in the same @Transactional boundary.
- * A @Scheduled processor reads unprocessed rows and publishes them to RabbitMQ.
- *
- * Resilience fields:
- * - retryCount      — incremented on each failed publish attempt; capped at MAX_RETRY_COUNT.
- * - lastAttemptTime — timestamp of the most recent publish attempt.
- * - errorReason     — last exception message, stored for diagnostics in the dead-letter table.
- */
 @Getter
 @Setter
 @Builder
@@ -55,16 +44,13 @@ public class PaymentOutboxMessage {
     @Builder.Default
     private boolean processed = false;
 
-    /** Number of failed publish attempts. Rows with retryCount >= MAX_RETRY_COUNT are dead-lettered. */
     @Column(name = "retry_count", nullable = false)
     @Builder.Default
     private int retryCount = 0;
 
-    /** Timestamp of the last publish attempt, successful or not. */
     @Column(name = "last_attempt_time")
     private Instant lastAttemptTime;
 
-    /** Last exception message — populated on failure, stored permanently in dead_letter_outbox. */
     @Lob
     @Column(name = "error_reason", columnDefinition = "TEXT")
     private String errorReason;

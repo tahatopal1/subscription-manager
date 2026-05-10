@@ -1,7 +1,3 @@
--- V2__create_transactions.sql
--- Financial transaction log: one row per charge attempt.
--- Idempotency key prevents double-charges on retries.
-
 CREATE TABLE transactions (
     id                BIGINT         NOT NULL AUTO_INCREMENT,
     user_id           BIGINT         NOT NULL,

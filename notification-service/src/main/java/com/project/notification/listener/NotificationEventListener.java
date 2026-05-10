@@ -8,14 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-/**
- * Trigger Vector 1 — Asynchronous RabbitMQ event listener.
- *
- * The notification-service is deliberately domain-agnostic. A single listener
- * on a single queue handles every inbound {@link NotificationEvent}, regardless
- * of which upstream service published it. All delivery decisions (type, message)
- * are owned by the sender and carried inside the event — this class is pure routing.
- */
 @Slf4j
 @Component
 @RequiredArgsConstructor

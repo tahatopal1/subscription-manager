@@ -5,9 +5,6 @@ import com.project.subscription.entity.enums.SubscriptionStatus;
 
 import java.time.Instant;
 
-/**
- * Response payload returned to the client for subscription data.
- */
 public record SubscriptionResponse(
         Long               id,
         Long               userId,

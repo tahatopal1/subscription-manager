@@ -1,7 +1,3 @@
--- V2__create_subscription_outbox_messages.sql
--- Transactional outbox table for reliable async event publishing.
--- Rows are polled by the SubscriptionOutboxJob (SKIP LOCKED) and published to RabbitMQ.
-
 CREATE TABLE subscription_outbox_messages
 (
     id                BIGINT       NOT NULL AUTO_INCREMENT,

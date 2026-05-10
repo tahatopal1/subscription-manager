@@ -1,6 +1,3 @@
--- V1__init_notification_schema.sql
--- Notification Service — complete schema baseline
-
 CREATE TABLE notifications (
     id               BIGINT       NOT NULL AUTO_INCREMENT,
     user_id          BIGINT       NOT NULL,

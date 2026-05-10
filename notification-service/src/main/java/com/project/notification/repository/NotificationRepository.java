@@ -14,10 +14,6 @@ import java.util.Optional;
 public interface NotificationRepository extends JpaRepository<Notification, Long>,
         JpaSpecificationExecutor<Notification> {
 
-    /**
-     * Retry job: fetches the top N FAILED notifications that are still eligible
-     * for automatic retry (retryCount below the configured ceiling).
-     */
     @Query("""
             SELECT n FROM Notification n
             WHERE n.status = :status

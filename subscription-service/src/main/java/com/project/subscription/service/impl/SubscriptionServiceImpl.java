@@ -40,13 +40,7 @@ import java.util.concurrent.TimeUnit;
 @Transactional(readOnly = true)
 public class SubscriptionServiceImpl implements SubscriptionService {
 
-    /** Statuses that mean a subscription is still "alive" — cannot create another one. */
-    private static final List<SubscriptionStatus> LIVING_STATUSES =
-            List.of(SubscriptionStatus.PENDING, SubscriptionStatus.ACTIVE, SubscriptionStatus.SUSPENDED);
-
-    /** Prefix for the Redis key used to deduplicate concurrent createSubscription calls. */
     private static final String CREATE_IDEMPOTENCY_PREFIX = "sub:create:lock:";
-    /** How long the deduplication key is held — long enough to cover a full request lifecycle. */
     private static final long   CREATE_IDEMPOTENCY_TTL_SECONDS = 30;
 
     final SubscriptionRepository subscriptionRepository;
@@ -60,18 +54,15 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     public SubscriptionResponse createSubscription(Long userId) {
         log.info("Creating subscription for userId={}", userId);
 
-        // Redisson idempotency guard — prevents duplicate concurrent submissions from the same user.
         RBucket<Boolean> idempotencyBucket = redissonClient.getBucket(CREATE_IDEMPOTENCY_PREFIX + userId);
         if (!idempotencyBucket.trySet(true, CREATE_IDEMPOTENCY_TTL_SECONDS, TimeUnit.SECONDS)) {
             log.warn("⚠️  Duplicate createSubscription call detected for userId={} — rejecting", userId);
             throw new ConflictException("A subscription creation is already in progress for your account. Please wait and try again.");
         }
 
-        // A SUSPENDED subscription means the user owes money — they must retry payment, not create a new subscription.
         subscriptionRepository.findFirstByUserIdAndStatus(userId, SubscriptionStatus.SUSPENDED)
                 .ifPresent(s -> { throw new SuspendedSubscriptionException(s.getId()); });
 
-        // A PENDING or ACTIVE subscription already exists — can't create another while it's live.
         if (subscriptionRepository.existsByUserIdAndStatusIn(userId,
                 List.of(SubscriptionStatus.PENDING, SubscriptionStatus.ACTIVE))) {
             throw new ConflictException(

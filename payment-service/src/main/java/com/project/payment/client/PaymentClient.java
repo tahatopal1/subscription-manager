@@ -13,10 +13,6 @@ import org.springframework.web.client.HttpServerErrorException;
 @Component
 public class PaymentClient {
 
-    /**
-     * Simulates charging a payment method.
-     * In a real app, this would call Stripe/Adyen/etc.
-     */
     @Retryable(
         retryFor = { HttpServerErrorException.class},
         backoff = @Backoff(delay = 500, multiplier = 2.0)

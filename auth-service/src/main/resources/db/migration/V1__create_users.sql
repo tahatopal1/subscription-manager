@@ -1,6 +1,3 @@
--- V1__create_users.sql
--- Core user identity table.
-
 CREATE TABLE users (
     id         BIGINT       NOT NULL AUTO_INCREMENT,
     email      VARCHAR(255) NOT NULL UNIQUE,

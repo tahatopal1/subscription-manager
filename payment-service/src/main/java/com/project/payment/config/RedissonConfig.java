@@ -7,15 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Redisson configuration for distributed idempotency checks.
- *
- * Connects to Redis using the same host/port/password properties defined under
- * spring.data.redis in application.yaml.
- *
- * A single-server setup is used here (standalone Redis). For production, switch
- * to config.useClusterServers() or config.useSentinelServers().
- */
 @Configuration
 public class RedissonConfig {
 

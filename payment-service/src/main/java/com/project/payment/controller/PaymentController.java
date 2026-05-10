@@ -50,10 +50,6 @@ public class PaymentController {
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * PATCH /api/payments/methods/{methodId}/default
-     * Marks the given payment method as the caller's default and unsets all others.
-     */
     @PatchMapping("/methods/{methodId}/default")
     public ResponseEntity<PaymentMethodResponse> setDefaultMethod(
             @AuthenticationPrincipal CustomUserDetails currentUser,

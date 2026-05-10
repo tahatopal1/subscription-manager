@@ -6,17 +6,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * Mock implementation of {@link NotificationProvider}.
- *
- * Behaviour:
- * - Simulates 500ms network latency via Thread.sleep.
- * - Randomly throws {@link ProviderUnavailableException} 5% of the time
- *   to exercise the retry scheduler.
- *
- * Replace this class with a real Twilio/AWS SES adapter in production —
- * no other code needs to change.
- */
 @Slf4j
 @Component
 public class MockNotificationProvider implements NotificationProvider {

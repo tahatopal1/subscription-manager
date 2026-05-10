@@ -5,10 +5,7 @@ import com.project.auth.entity.User;
 import java.time.Instant;
 import java.util.Set;
 
-/**
- * Response payload representing a user's identity profile.
- * NEVER includes password — this is a read-only projection safe for API responses.
- */
+
 public record UserResponse(
         Long id,
         String email,
@@ -20,9 +17,6 @@ public record UserResponse(
         Instant updatedAt
 ) {
 
-    /**
-     * Static factory to map a User entity to a UserResponse.
-     */
     public static UserResponse from(User user) {
         return new UserResponse(
                 user.getId(),

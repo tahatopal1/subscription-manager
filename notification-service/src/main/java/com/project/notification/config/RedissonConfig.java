@@ -7,12 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Redisson configuration for distributed idempotency checks.
- *
- * Single-server mode for standalone Redis. Switch to
- * config.useClusterServers() or config.useSentinelServers() for production HA.
- */
 @Configuration
 public class RedissonConfig {
 

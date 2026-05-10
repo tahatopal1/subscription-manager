@@ -6,14 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-/**
- * Custom principal that carries the database Long ID natively.
- *
- * Using this instead of the generic {@link org.springframework.security.core.userdetails.User}
- * eliminates all string-parsing of the security context — controllers inject this directly
- * via {@code @AuthenticationPrincipal CustomUserDetails} and access {@link #getId()} with
- * full type safety.
- */
+
 @Getter
 public class CustomUserDetails implements UserDetails {
 

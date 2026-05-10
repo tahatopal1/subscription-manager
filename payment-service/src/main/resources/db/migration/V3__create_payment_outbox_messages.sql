@@ -1,7 +1,3 @@
--- V3__create_payment_outbox_messages.sql
--- Transactional outbox table for reliable async payment result publishing.
--- Rows are polled by the PaymentOutboxJob (SKIP LOCKED) and published to RabbitMQ.
-
 CREATE TABLE payment_outbox_messages (
     id                BIGINT       NOT NULL AUTO_INCREMENT,
     aggregate_id      BIGINT       NOT NULL,

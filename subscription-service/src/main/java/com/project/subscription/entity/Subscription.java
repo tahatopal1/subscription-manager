@@ -39,10 +39,6 @@ public class Subscription extends BaseEntity {
     @Column(name = "end_date")
     private Instant endDate;
 
-    /**
-     * When true, the subscription has been scheduled for cancellation at the end of the current billing period.
-     * The status remains ACTIVE until the nightly reaper job flips it to CANCELLED once endDate has passed.
-     */
     @Builder.Default
     @Column(name = "cancel_at_period_end", nullable = false)
     private boolean cancelAtPeriodEnd = false;

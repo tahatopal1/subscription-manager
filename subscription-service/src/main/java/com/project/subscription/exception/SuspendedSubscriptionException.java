@@ -1,10 +1,5 @@
 package com.project.subscription.exception;
 
-/**
- * Thrown when a user attempts to create a new subscription while they have one in SUSPENDED state.
- * SUSPENDED means they have an unpaid balance — they must fix their payment method, not bypass it.
- * Mapped to HTTP 409 Conflict with a structured payload by GlobalExceptionHandler.
- */
 public class SuspendedSubscriptionException extends RuntimeException {
 
     private final Long subscriptionId;

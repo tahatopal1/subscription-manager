@@ -14,29 +14,11 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-/**
- * Nightly job that finds ACTIVE subscriptions expiring within the next 24 hours
- * and writes a SUBSCRIPTION_RENEWAL_REQUESTED outbox event for each.
- *
- * <p>The Payment Service receives these events and charges the card on file.
- *
- * <p><b>SKIP LOCKED</b>: the query locks only the rows it will process and skips
- * any rows held by another pod. This makes the job safe to run on multiple
- * instances simultaneously without a distributed lock.
- *
- * <p>{@code createRenewalOutboxEvent} carries {@code @Transactional(REQUIRED)} so it
- * joins the outer transaction opened here — the outbox row and any subscription
- * field changes are committed atomically in a single transaction at the end of
- * the method.
- *
- * <p>Runs at 02:00 AM every day.
- */
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class SubscriptionRenewalJob {
 
-    /** Rows processed per scheduler tick — keeps memory bounded. */
     private static final int BATCH_SIZE = 100;
 
     private final SubscriptionRepository    subscriptionRepository;
@@ -58,9 +40,6 @@ public class SubscriptionRenewalJob {
         log.info("SubscriptionRenewalJob: processing {} expiring subscription(s)", expiring.size());
 
         for (Subscription subscription : expiring) {
-            // createRenewalOutboxEvent joins this transaction (REQUIRED propagation).
-            // Any exception here rolls back the entire batch, leaving all rows unlocked
-            // for the next scheduler tick to retry — safe and consistent.
             subscriptionService.createRenewalOutboxEvent(subscription);
             log.info("SubscriptionRenewalJob: renewal event written for subscriptionId={}, userId={}",
                     subscription.getId(), subscription.getUserId());

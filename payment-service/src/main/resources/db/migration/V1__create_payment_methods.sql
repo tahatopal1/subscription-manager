@@ -1,7 +1,3 @@
--- V1__create_payment_methods.sql
--- Stores tokenised payment instruments per user.
--- Composite unique key prevents duplicate gateway tokens for the same user.
-
 CREATE TABLE payment_methods (
     id            BIGINT       NOT NULL AUTO_INCREMENT,
     user_id       BIGINT       NOT NULL,

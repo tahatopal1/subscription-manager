@@ -13,15 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 
-/**
- * Single AOP advice that intercepts every {@code SubscriptionServiceImpl} method returning a
- * {@link SubscriptionResponse} and publishes a {@link SubscriptionNotificationEvent} for
- * post-commit notification dispatch.
- * <p>
- * Channel is derived from {@link SubscriptionResponse#status()}.name() prefixed with
- * {@link SubscriptionNotificationConstants#SOURCE}, e.g. "SUBSCRIPTION.ACTIVE". The only special
- * case is ACTIVE + cancelAtPeriodEnd, which has its own suffix.
- */
 @Slf4j
 @Aspect
 @Component
@@ -47,7 +38,6 @@ public class SubscriptionNotificationAspect {
     eventPublisher.publishEvent(new SubscriptionNotificationEvent(response, channel));
   }
 
-  // ── Channel resolution — SOURCE + "." + status.name() ─────────────────
 
   private String resolveChannel(SubscriptionResponse response) {
     SubscriptionStatus status = response.status();
@@ -67,13 +57,6 @@ public class SubscriptionNotificationAspect {
       case CANCELLED -> SubscriptionNotificationConstants.CHANNEL_CANCELLED;
       case SUSPENDED -> SubscriptionNotificationConstants.CHANNEL_SUSPENDED;
     };
-  }
-
-  private boolean checkIfScheduledCancellation(SubscriptionResponse response) {
-    return response.status() == SubscriptionStatus.ACTIVE
-        && response.cancelAtPeriodEnd()
-        && response.endDate() != null
-        && response.endDate().isAfter(Instant.now());
   }
 
 }

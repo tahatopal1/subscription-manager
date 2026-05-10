@@ -4,10 +4,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-/**
- * Payload for user registration.
- * Validated at the Controller level using @Valid (03-coding-security.md §3).
- */
 public record RegisterRequest(
 
         @NotBlank(message = "email must not be blank")

@@ -13,7 +13,6 @@ public record TransactionReceiptResponse(
     String failureReason,
     Instant createdAt
 ) {
-    /** User-facing factory — userId is intentionally omitted (null) for privacy. */
     public static TransactionReceiptResponse from(Transaction tx) {
         return new TransactionReceiptResponse(
             tx.getId(),
@@ -25,7 +24,6 @@ public record TransactionReceiptResponse(
         );
     }
 
-    /** Admin factory — includes userId for cross-service traceability. */
     public static TransactionReceiptResponse fromAdmin(Transaction tx) {
         return new TransactionReceiptResponse(
             tx.getId(),

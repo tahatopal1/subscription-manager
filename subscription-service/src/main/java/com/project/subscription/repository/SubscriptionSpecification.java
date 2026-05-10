@@ -12,9 +12,6 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Dynamic query specifications for Subscription filtering.
- */
 public class SubscriptionSpecification {
 
     public static Specification<Subscription> filterBy(SubscriptionSearchRequest request) {

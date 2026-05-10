@@ -44,57 +44,34 @@ public class TransactionService {
     private static final String     IDEMPOTENCY_KEY_PREFIX   = "idempotency:payment:";
     private static final long IDEMPOTENCY_TTL_SECONDS = 15;
 
-    /** Fixed subscription charge — replace with plan-service lookup when pricing tiers are introduced. */
     private static final BigDecimal  SUBSCRIPTION_PRICE       = new BigDecimal("29.99");
-    /** Idempotency key template: SUB-{subscriptionId}-{billingPeriod}. */
     private static final String      IDEMPOTENCY_KEY_PATTERN  = "SUB-%s-%s";
-    /** Billing period granularity — month + 2-digit year, e.g. "05-25". */
     private static final String      BILLING_PERIOD_FORMAT    = "MM-yy";
 
-    /** User-scoped transaction history — filtered by userId. */
     public Page<TransactionReceiptResponse> getTransactions(Long userId, Pageable pageable) {
         return transactionRepository.findAllByUserId(userId, pageable)
                 .map(TransactionReceiptResponse::from);
     }
 
-    /** Admin-accessible transaction search — applies dynamic criteria with no userId constraint. */
     public Page<TransactionReceiptResponse> searchTransactions(TransactionSearchCriteria criteria, Pageable pageable) {
         return transactionRepository.findAll(TransactionSpecification.filterBy(criteria), pageable)
                 .map(TransactionReceiptResponse::fromAdmin);
     }
 
-    /**
-     * Step 3: Called by SubscriptionEventListener when a SUBSCRIPTION_INITIATED message arrives.
-     * Processes the payment and atomically persists a PaymentResultEvent to the outbox.
-     * Step 4: The OutboxProcessor then delivers that outbox entry to PAYMENT_RESULT_QUEUE.
-     *
-     * <p>Amount and idempotencyKey are forged here:
-     * <ul>
-     *   <li><b>amount</b> — fixed MVP price (plan-service lookup in future iterations).</li>
-     *   <li><b>idempotencyKey</b> — scoped to subscription + billing period (MM-yy),
-     *       preventing double-charges within the same month while allowing charges in future cycles.</li>
-     * </ul>
-     */
     public void processCharge(Long userId, Long subscriptionId) {
 
-        // ── Forge idempotency key ──────────────────────────────────────────
-        // Format: SUB-{subscriptionId}-{MM-yy}
-        // Allows re-billing in a new month while deduplicating retries within the same period.
         String billingPeriod  = DateTimeFormatter.ofPattern(BILLING_PERIOD_FORMAT).format(ZonedDateTime.now());
         String idempotencyKey = IDEMPOTENCY_KEY_PATTERN.formatted(subscriptionId, billingPeriod);
 
         log.info("Processing charge for userId={}, subscriptionId={}, amount={}, idempotencyKey={}",
                 userId, subscriptionId, SUBSCRIPTION_PRICE, idempotencyKey);
 
-        // Redisson idempotency guard — if this key was already processed, skip silently.
         RBucket<Boolean> idempotencyBucket = redissonClient.getBucket(IDEMPOTENCY_KEY_PREFIX + idempotencyKey);
         if (!idempotencyBucket.trySet(true, IDEMPOTENCY_TTL_SECONDS, TimeUnit.SECONDS)) {
             log.info("Duplicate idempotencyKey={} detected via Redis — skipping charge", idempotencyKey);
             return;
         }
 
-        // Fetch the user's default payment method
-        // Persist transaction as PENDING
         Transaction tx = Transaction.builder()
                 .userId(userId)
                 .subscriptionId(subscriptionId)
@@ -104,8 +81,6 @@ public class TransactionService {
                 .build();
         tx = transactionRepository.save(tx);
 
-        // Resolve the user's default payment method.
-        // If none exists, record as FAILED and return immediately — no exception-as-control-flow.
         Optional<PaymentMethod> pmOptional = paymentMethodRepository
                 .findAllByUserId(userId)
                 .stream()
@@ -126,7 +101,6 @@ public class TransactionService {
         PaymentMethod pm = pmOptional.get();
         tx.setPaymentMethodId(pm.getId());
 
-        // Charge the gateway — actual I/O failure is the only thing that belongs in a try-catch
         PaymentStatus resultStatus;
         try {
             String reference = paymentClient.charge(pm.getGatewayToken(), SUBSCRIPTION_PRICE);
@@ -148,12 +122,6 @@ public class TransactionService {
         }
     }
 
-    // ---- Internal helper -------------------------------------------------------
-
-    /**
-     * Writes a PaymentResultEvent row to payment_outbox_messages.
-     * Must be called within an active @Transactional boundary.
-     */
     private void persistPaymentResultOutbox(Long subscriptionId, PaymentStatus status) {
         try {
             PaymentResultEvent event = new PaymentResultEvent(subscriptionId, status);

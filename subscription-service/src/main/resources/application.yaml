@@ -23,17 +23,15 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
 
-  # RabbitMQ connection
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}
     port: ${RABBITMQ_PORT:5672}
     username: ${RABBITMQ_USERNAME:guest}
     password: ${RABBITMQ_PASSWORD:guest}
     virtual-host: /
-    publisher-confirm-type: correlated   # Required for ConfirmCallback in OutboxProcessor
+    publisher-confirm-type: correlated
     publisher-returns: true
 
-  # Redis — used by Redisson for idempotency locking
   data:
     redis:
       host: ${REDIS_HOST:localhost}

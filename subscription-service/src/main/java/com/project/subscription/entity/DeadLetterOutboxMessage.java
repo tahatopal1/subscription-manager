@@ -6,13 +6,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 
-/**
- * Dead-letter store for subscription outbox messages that exhausted all retry attempts.
- *
- * When a {@link SubscriptionOutboxMessage} reaches the retry limit, the outbox processor:
- *   1. Inserts a copy of the full record here (for diagnostics / manual replay).
- *   2. Deletes the original from the main outbox table (keeping it lean and fast).
- */
 @Getter
 @Setter
 @Builder
@@ -32,7 +25,6 @@ public class DeadLetterOutboxMessage {
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
-    /** Original outbox message ID — preserved for traceability. */
     @Column(name = "original_outbox_id", nullable = false)
     private Long originalOutboxId;
 
@@ -46,20 +38,16 @@ public class DeadLetterOutboxMessage {
     @Column(name = "payload", nullable = false, columnDefinition = "TEXT")
     private String payload;
 
-    /** Total attempts made before giving up. */
     @Column(name = "retry_count", nullable = false)
     private int retryCount;
 
-    /** Timestamp of the last failed attempt. */
     @Column(name = "last_attempt_time")
     private Instant lastAttemptTime;
 
-    /** Exception message from the final failed attempt. */
     @Lob
     @Column(name = "error_reason", columnDefinition = "TEXT")
     private String errorReason;
 
-    /** When this record was moved to the dead-letter table. */
     @CreationTimestamp
     @Column(name = "dead_lettered_at", nullable = false, updatable = false)
     private Instant deadLetteredAt;

@@ -1,6 +1,3 @@
--- V2__create_user_roles.sql
--- Role membership table + email lookup index on users.
-
 CREATE TABLE user_roles (
     user_id BIGINT      NOT NULL,
     role    VARCHAR(50) NOT NULL,

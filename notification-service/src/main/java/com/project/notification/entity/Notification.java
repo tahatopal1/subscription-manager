@@ -6,11 +6,6 @@ import lombok.*;
 
 import java.time.Instant;
 
-/**
- * Immutable audit trail of every notification dispatch attempt.
- * A new row is created per delivery attempt — existing rows are only updated
- * in-place to reflect final status (SENT/FAILED) and retry metadata.
- */
 @Getter
 @Setter
 @Builder

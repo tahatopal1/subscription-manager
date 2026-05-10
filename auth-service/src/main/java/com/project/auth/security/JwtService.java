@@ -13,13 +13,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Single source of truth for JWT signing and parsing within the entire architecture.
- * Per auth-service spec §1: only this service handles JWT signing secrets.
- * Per auth-service spec §4: JWT payload MUST include 'sub' (UUID) and 'roles' (string array).
- *
- * Security note (03-coding-security.md §2): the secret key is NEVER logged.
- */
 @Slf4j
 @Service
 public class JwtService {

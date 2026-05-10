@@ -1,8 +1,3 @@
--- V3__create_dead_letter_outbox.sql
--- Dead-letter table for subscription outbox rows that exhausted all retry attempts.
--- The scheduler inserts here and deletes from subscription_outbox_messages,
--- keeping the hot outbox table lean and SKIP LOCKED queries fast.
-
 CREATE TABLE dead_letter_outbox
 (
     id                  BIGINT       NOT NULL AUTO_INCREMENT,

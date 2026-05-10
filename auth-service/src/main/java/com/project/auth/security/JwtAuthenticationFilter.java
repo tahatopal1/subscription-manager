@@ -20,11 +20,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * JWT authentication filter that runs once per request.
- * Extracts and validates the Bearer token, then populates the SecurityContext
- * with a {@link CustomUserDetails} principal carrying the typed Long user ID.
- */
+
 @Slf4j
 @Component
 @RequiredArgsConstructor

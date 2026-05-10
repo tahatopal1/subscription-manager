@@ -5,10 +5,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.Instant;
 
-/**
- * Optional filter criteria for the admin notification search endpoint.
- * All fields are nullable — omitted params are ignored in the dynamic query.
- */
 public record NotificationSearchRequest(
         Long              id,
         Long              userId,

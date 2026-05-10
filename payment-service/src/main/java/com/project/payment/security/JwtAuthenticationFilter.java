@@ -17,10 +17,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * JWT filter that sets a {@link CustomUserDetails} principal with a typed Long ID
- * so controllers can inject it cleanly via {@code @AuthenticationPrincipal}.
- */
 @Slf4j
 @Component
 @RequiredArgsConstructor

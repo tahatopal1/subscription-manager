@@ -13,13 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * User-facing subscription REST controller.
- *
- * Identity Resolution:
- *   - userId is extracted from the Bearer JWT token via {@link CustomUserDetails}.
- *   - No manual header parsing or request body identity allowed.
- */
 @Slf4j
 @RestController
 @RequestMapping("/api/subscriptions")
@@ -29,7 +22,6 @@ public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;
 
-    /** POST /api/subscriptions — initiates a subscription for the authenticated user. */
     @PostMapping
     public ResponseEntity<SubscriptionResponse> createSubscription(
             @AuthenticationPrincipal CustomUserDetails currentUser) {
@@ -38,7 +30,6 @@ public class SubscriptionController {
                 .body(subscriptionService.createSubscription(currentUser.getId()));
     }
 
-    /** GET /api/subscriptions — lists all subscriptions for the authenticated user. */
     @GetMapping
     public ResponseEntity<List<SubscriptionResponse>> getSubscriptions(
             @AuthenticationPrincipal CustomUserDetails currentUser) {
@@ -46,7 +37,6 @@ public class SubscriptionController {
         return ResponseEntity.ok(subscriptionService.getSubscriptionsByUserId(currentUser.getId()));
     }
 
-    /** PATCH /api/subscriptions/cancel — schedules the caller's ACTIVE subscription for cancellation at period end. */
     @PatchMapping("/cancel")
     public ResponseEntity<SubscriptionResponse> cancelSubscription(
             @AuthenticationPrincipal CustomUserDetails currentUser) {
@@ -54,7 +44,6 @@ public class SubscriptionController {
         return ResponseEntity.ok(subscriptionService.cancelSubscriptionByUserId(currentUser.getId()));
     }
 
-    /** POST /api/subscriptions/retry — retries payment for the caller's PENDING subscription. */
     @PostMapping("/retry")
     public ResponseEntity<SubscriptionResponse> retryPayment(
             @AuthenticationPrincipal CustomUserDetails currentUser) {
@@ -63,7 +52,6 @@ public class SubscriptionController {
                 .body(subscriptionService.retryPaymentByUserId(currentUser.getId()));
     }
 
-    /** PATCH /api/subscriptions/reactivate — undoes the caller's scheduled cancellation. */
     @PatchMapping("/reactivate")
     public ResponseEntity<SubscriptionResponse> reactivate(
             @AuthenticationPrincipal CustomUserDetails currentUser) {

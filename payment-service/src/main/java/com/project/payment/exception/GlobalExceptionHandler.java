@@ -11,20 +11,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.net.URI;
 import java.time.Instant;
 
-/**
- * Centralised exception → HTTP response mapper for payment-service.
- *
- * <p>Uses RFC 7807 {@link ProblemDetail} so every error response has a consistent shape:
- * <pre>
- * {
- *   "type":     "...",
- *   "title":    "...",
- *   "status":   409,
- *   "detail":   "human-readable explanation",
- *   "timestamp": "..."
- * }
- * </pre>
- */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {

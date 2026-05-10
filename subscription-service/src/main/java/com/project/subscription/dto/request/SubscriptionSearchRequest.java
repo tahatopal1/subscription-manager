@@ -5,9 +5,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-/**
- * Payload for searching subscriptions with optional admin filters.
- */
 public record SubscriptionSearchRequest(
         String userId,
         SubscriptionStatus status,

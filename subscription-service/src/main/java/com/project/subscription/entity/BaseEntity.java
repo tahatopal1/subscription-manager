@@ -11,11 +11,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
-/**
- * Base auditing superclass for all JPA entities.
- * Provides createdAt and updatedAt timestamps via Spring Data JPA auditing.
- * Per 04-data-layer.md: all entities MUST extend this class.
- */
 @Getter
 @Setter
 @MappedSuperclass

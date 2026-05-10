@@ -8,10 +8,6 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * JPA Specification factory for dynamic notification search.
- * Each non-null field in {@link NotificationSearchRequest} adds an AND predicate.
- */
 public final class NotificationSpecification {
 
     private NotificationSpecification() {}

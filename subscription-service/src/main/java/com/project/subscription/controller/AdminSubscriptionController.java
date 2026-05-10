@@ -17,12 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
-/**
- * Admin-only subscription management controller.
- *
- * All operations delegate to SubscriptionService.
- * Authorization is enforced here via @PreAuthorize("hasRole('ADMIN')").
- */
 @Slf4j
 @RestController
 @RequestMapping("/api/admin/subscriptions")
@@ -33,7 +27,6 @@ public class AdminSubscriptionController {
     private final SubscriptionService subscriptionService;
     private final RedisConnectionFactory redisConnectionFactory;
 
-    /** GET /api/admin/subscriptions — paginated search across all subscriptions. */
     @GetMapping
     public ResponseEntity<Page<SubscriptionResponse>> getAllSubscriptions(
             SubscriptionSearchRequest request,
@@ -42,7 +35,6 @@ public class AdminSubscriptionController {
         return ResponseEntity.ok(subscriptionService.getAllSubscriptions(request, pageable));
     }
 
-    /** GET /api/admin/subscriptions/{subscriptionId} — fetch any subscription by ID. */
     @GetMapping("/{subscriptionId}")
     public ResponseEntity<SubscriptionResponse> getSubscriptionById(
             @PathVariable Long subscriptionId) {
@@ -50,12 +42,6 @@ public class AdminSubscriptionController {
         return ResponseEntity.ok(subscriptionService.getSubscriptionById(subscriptionId));
     }
 
-    /**
-     * PUT /api/admin/subscriptions/{subscriptionId}
-     * Partially updates a subscription's status, startDate, and/or endDate.
-     * All three fields are optional — only non-null values are applied.
-     * Does not emit outbox events; use domain-specific endpoints for event-driven transitions.
-     */
     @PutMapping("/{subscriptionId}")
     public ResponseEntity<SubscriptionResponse> updateSubscription(
             @PathVariable Long subscriptionId,
@@ -64,11 +50,6 @@ public class AdminSubscriptionController {
         return ResponseEntity.ok(subscriptionService.updateSubscription(subscriptionId, request));
     }
 
-    /**
-     * POST /api/admin/subscriptions/users/{userId}
-     * Creates a subscription on behalf of a user — same flow as self-service.
-     * Returns 202 Accepted (activation is async pending payment confirmation).
-     */
     @PostMapping("/users/{userId}")
     public ResponseEntity<SubscriptionResponse> createSubscriptionForUser(
             @PathVariable Long userId) {
@@ -77,7 +58,6 @@ public class AdminSubscriptionController {
                 .body(subscriptionService.createSubscription(userId));
     }
 
-    /** PATCH /api/admin/subscriptions/{subscriptionId}/cancel — graceful cancellation by subscriptionId. */
     @PatchMapping("/{subscriptionId}/cancel")
     public ResponseEntity<SubscriptionResponse> cancelSubscription(
             @PathVariable Long subscriptionId) {
@@ -85,11 +65,6 @@ public class AdminSubscriptionController {
         return ResponseEntity.ok(subscriptionService.cancel(subscriptionId));
     }
 
-    /**
-     * POST /api/admin/subscriptions/{subscriptionId}/retry
-     * Triggers a payment retry for a specific PENDING subscription.
-     * Returns 202 Accepted — result arrives asynchronously via PAYMENT_RESULT_QUEUE.
-     */
     @PostMapping("/{subscriptionId}/retry")
     public ResponseEntity<SubscriptionResponse> retryPayment(
             @PathVariable Long subscriptionId) {
@@ -98,7 +73,6 @@ public class AdminSubscriptionController {
                 .body(subscriptionService.retry(subscriptionId));
     }
 
-    /** PATCH /api/admin/subscriptions/{subscriptionId}/reactivate — undoes scheduled cancellation. */
     @PatchMapping("/{subscriptionId}/reactivate")
     public ResponseEntity<SubscriptionResponse> reactivate(
             @PathVariable Long subscriptionId) {
@@ -108,8 +82,6 @@ public class AdminSubscriptionController {
 
     @DeleteMapping("/cache")
     public void flushEntireDatabase() {
-        // flushDb() clears the currently selected database (default is 0)
-        // flushAll() clears ALL logical databases (0-15)
         redisConnectionFactory.getConnection().serverCommands().flushDb();
         log.warn("REDIS DATABASE COMPLETELY FLUSHED!");
     }

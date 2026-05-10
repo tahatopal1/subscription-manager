@@ -14,11 +14,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.List;
 
-/**
- * Central exception handler for all application exceptions.
- * Per 03-coding-security.md §1: no try-catch scattered in business logic;
- * all exceptions are caught and mapped to standardized ApiError JSON responses.
- */
+
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {

@@ -6,10 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-/**
- * Custom principal carrying the typed Long user ID parsed from the JWT subject.
- * Injected into controllers via {@code @AuthenticationPrincipal CustomUserDetails}.
- */
 @Getter
 public class CustomUserDetails implements UserDetails {
 

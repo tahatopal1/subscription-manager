@@ -5,9 +5,6 @@ import com.project.notification.entity.enums.NotificationStatus;
 
 import java.time.Instant;
 
-/**
- * Response payload returned to admin callers.
- */
 public record NotificationResponse(
         Long               id,
         Long               userId,

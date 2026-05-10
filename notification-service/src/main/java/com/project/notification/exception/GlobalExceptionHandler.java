@@ -12,9 +12,6 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Centralized exception handling — all errors return a consistent JSON shape.
- */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {

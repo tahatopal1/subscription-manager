@@ -6,20 +6,7 @@ import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * JPA entity representing an identity account in the system.
- *
- * Rules applied (auth-service spec):
- *  - Single User entity: no separate Admin/Customer entities.
- *  - UUID primary key via GenerationType.UUID (String-based).
- *  - Roles mapped with @ElementCollection + FetchType.EAGER (always needed for JWT generation).
- *  - No @Data: uses @Getter/@Setter/@Builder/@NoArgsConstructor/@AllArgsConstructor.
- *  - Extends BaseEntity for auditing + optimistic locking (04-data-layer.md §2).
- *
- * Security rules (auth-service spec §1):
- *  - password is the ONLY place BCrypt hashes are stored in the entire architecture.
- *  - isLocked allows instant revocation of JWT generation rights.
- */
+
 @Getter
 @Setter
 @Builder

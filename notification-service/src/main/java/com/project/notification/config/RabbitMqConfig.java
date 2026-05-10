@@ -8,15 +8,6 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * RabbitMQ bindings for the notification-service.
- *
- * A single durable queue serves as the universal notification channel.
- * Every upstream service (subscription, payment, or future domains) publishes
- * a {@link com.project.notification.dto.event.NotificationEvent} to this queue.
- *
- * Durable=true ensures messages survive a broker restart.
- */
 @Configuration
 public class RabbitMqConfig {
 

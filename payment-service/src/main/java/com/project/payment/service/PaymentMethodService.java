@@ -33,13 +33,11 @@ public class PaymentMethodService {
     public PaymentMethodResponse addMethod(Long userId, AddPaymentMethodRequest request) {
         log.info("Adding payment method for userId={}", userId);
 
-        // Eagerly reject duplicates with a meaningful 409 before the DB constraint fires.
         if (paymentMethodRepository.existsByGatewayTokenAndUserId(request.gatewayToken(), userId)) {
             throw new DuplicatePaymentMethodException(
                     "Payment method with token '" + request.gatewayToken() + "' is already registered for this account.");
         }
 
-        // If this is the first method, make it default.
         boolean isFirst = !paymentMethodRepository.existsByUserIdAndIsDefault(userId, true);
 
         PaymentMethod pm = PaymentMethod.builder()
@@ -51,7 +49,6 @@ public class PaymentMethodService {
                 .build();
 
         if (pm.isDefault()) {
-            // Unset other defaults.
             paymentMethodRepository.findAllByUserId(userId)
                     .forEach(existing -> existing.setDefault(false));
         }
@@ -69,7 +66,6 @@ public class PaymentMethodService {
         boolean wasDefault = pm.isDefault();
         paymentMethodRepository.delete(pm);
 
-        // If the deleted method was the default, promote the next available one.
         if (wasDefault) {
             paymentMethodRepository.findFirstByUserId(userId).ifPresent(next -> {
                 next.setDefault(true);
@@ -79,10 +75,6 @@ public class PaymentMethodService {
         }
     }
 
-    /**
-     * Sets the given payment method as the user's default, unsets all others.
-     * Enforces ownership — the method must belong to userId.
-     */
     @Transactional
     public PaymentMethodResponse setDefaultMethod(Long userId, Long methodId) {
         log.info("Setting default payment method id={} for userId={}", methodId, userId);
@@ -95,12 +87,10 @@ public class PaymentMethodService {
             return PaymentMethodResponse.from(target);
         }
 
-        // Unset all current defaults for this user, then mark the target.
         paymentMethodRepository.findAllByUserId(userId)
                 .forEach(pm -> pm.setDefault(false));
 
         target.setDefault(true);
-        // Hibernate dirty-checking persists all mutations at commit — no explicit save() needed.
         log.info("Payment method id={} set as default for userId={}", methodId, userId);
         return PaymentMethodResponse.from(target);
     }
