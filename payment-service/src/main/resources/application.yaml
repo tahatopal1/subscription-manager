@@ -45,6 +45,8 @@ jwt:
 logging:
   level:
     com.project.payment: DEBUG
+    org.hibernate.SQL: OFF
+    org.hibernate.orm.jdbc.bind: OFF
 
 management:
   tracing:
