@@ -87,3 +87,7 @@ docker-compose up --build -d
 * **Kimlik Doğrulama (Authentication):** Sistemde durumlu (stateful) HTTP oturumları (session) kullanılmaz. Güvenlik yetkilendirmesi, servis sınırlarında doğrulanan durumsuz (stateless) JWT (JSON Web Token) yapısı ile sağlanır.
 * **Hız Sınırlandırma (Rate Limiting):** Hizmet reddi (DoS) saldırılarına ve kaba kuvvet (brute-force) denemelerine karşı koruma sağlamak amacıyla, Gateway düzeyinde Redis tabanlı bir hız sınırlandırma politikası (IP başına dakikada 10 istek) aktif edilmiştir.
 * * **Yük Dengeleme (Load Balancing):** Ağır trafik durumunda oluşacak yükü dengelemek için, Gateway düzeyinde Redis tabanlı bir yük dağıtım politikası aktif edilmiştir.
+
+## 📐 Sistem Mimari Diyagramı
+<img width="1325" height="802" alt="image" src="https://github.com/user-attachments/assets/30e141ad-3eee-4548-9fc7-2588c3b64970" />
+
