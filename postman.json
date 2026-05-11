@@ -1,0 +1,1101 @@
+{
+  "info": {
+    "_postman_id": "c5cccfce-def9-42d1-82b0-3364c38ae82a",
+    "name": "Subscription Management API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "9842768"
+  },
+  "item": [
+    {
+      "name": "Auth Service",
+      "item": [
+        {
+          "name": "Users (Admin)",
+          "item": [
+            {
+              "name": "Search Users",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3Nzg0MjE4NzQsImV4cCI6MTc3ODUwODI3NH0.No41uzWje9JcQqk6z9ntqcz6ZiB5lqbQb2BZxf6zLo9p4m-1-8EgoNxfZ1Gc3mmFXC8W_h3T5XulusNbRhoysA",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/api/admin/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "user",
+                      "disabled": true
+                    },
+                    {
+                      "key": "surname",
+                      "value": "Admin",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "email",
+                      "value": "admin",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "role",
+                      "value": "ROLE_ADMIN",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "sort",
+                      "value": "createdAt,desc",
+                      "type": "text",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create User",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3NzgzNTgzMTQsImV4cCI6MTc3ODQ0NDcxNH0.JIukSr5z9VBDuH_w4hWcaDaM1YiA-KpuQotLe_d9qHiHr38PNryaqwVhh0FuwE0go8q3MfBs9sKATuPQPuS4fw",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"admin3@example.com\",\n    \"password\": \"admin12345\",\n    \"name\": \"Admin3\",\n    \"surname\": \"System\",\n    \"roles\": [\n        \"ROLE_ADMIN\"\n    ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/api/admin/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update User",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3Nzg0MTI3MDAsImV4cCI6MTc3ODQ5OTEwMH0.cm1yKPYfFcD_ZMseGL4bfAwgJ9iNlRkCPgfs1IC6XlWkUkqoW3nWoa0tDLJulNvdVUrWYUZDUPUildfayCBjxQ",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"user5@example.com\",\n    \"name\": \"User55\",\n    \"surname\": \"System\",\n    \"roles\": [\n        \"ROLE_ADMIN\"\n    ],\n    \"isLocked\": false,\n    \"createdAt\": \"2026-05-10T11:31:04.904831Z\",\n    \"updatedAt\": \"2026-05-10T11:31:04.904831Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/api/admin/users/5",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "users",
+                    "5"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete User",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3Nzg0MTI3MDAsImV4cCI6MTc3ODQ5OTEwMH0.cm1yKPYfFcD_ZMseGL4bfAwgJ9iNlRkCPgfs1IC6XlWkUkqoW3nWoa0tDLJulNvdVUrWYUZDUPUildfayCBjxQ",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/api/admin/users/5",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "users",
+                    "5"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get User",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3Nzg0MTI3MDAsImV4cCI6MTc3ODQ5OTEwMH0.cm1yKPYfFcD_ZMseGL4bfAwgJ9iNlRkCPgfs1IC6XlWkUkqoW3nWoa0tDLJulNvdVUrWYUZDUPUildfayCBjxQ",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8070/api/admin/users/5",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8070",
+                  "path": [
+                    "api",
+                    "admin",
+                    "users",
+                    "5"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Change Password",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3Nzg0MTI3MDAsImV4cCI6MTc3ODQ5OTEwMH0.cm1yKPYfFcD_ZMseGL4bfAwgJ9iNlRkCPgfs1IC6XlWkUkqoW3nWoa0tDLJulNvdVUrWYUZDUPUildfayCBjxQ",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"password\":\"54321user\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/api/admin/users/5/password",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "users",
+                    "5",
+                    "password"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Toggle Lock",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3Nzg0MTI3MDAsImV4cCI6MTc3ODQ5OTEwMH0.cm1yKPYfFcD_ZMseGL4bfAwgJ9iNlRkCPgfs1IC6XlWkUkqoW3nWoa0tDLJulNvdVUrWYUZDUPUildfayCBjxQ",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/api/admin/users/5/lock",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "users",
+                    "5",
+                    "lock"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Users",
+          "item": [
+            {
+              "name": "Get Profile",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc3ODM1ODE0NywiZXhwIjoxNzc4NDQ0NTQ3fQ.ooWdh-kXe3nW42pQnrCY1uvHPpx9XMNLXlzEQpVYreOsq6iLYCjrP3YRk4B79voAzZMuvL5d5UT9M0J450jOfQ",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Profile",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc3ODM1ODE0NywiZXhwIjoxNzc4NDQ0NTQ3fQ.ooWdh-kXe3nW42pQnrCY1uvHPpx9XMNLXlzEQpVYreOsq6iLYCjrP3YRk4B79voAzZMuvL5d5UT9M0J450jOfQ",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"update@example.com\",\n    \"name\": \"UpdatedName\",\n    \"surname\": \"UpdatedSurname\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Renew Password",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc3ODM1ODE0NywiZXhwIjoxNzc4NDQ0NTQ3fQ.ooWdh-kXe3nW42pQnrCY1uvHPpx9XMNLXlzEQpVYreOsq6iLYCjrP3YRk4B79voAzZMuvL5d5UT9M0J450jOfQ",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"oldPassword\": \"user1234\",\n    \"newPassword\": \"user4321\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8070/api/users/password",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8070",
+                  "path": [
+                    "api",
+                    "users",
+                    "password"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Auth",
+          "item": [
+            {
+              "name": "Login",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\":\"user8@example.com\",\n    \"password\":\"user1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/api/auth/login",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Login Admin",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\":\"admin@example.com\",\n    \"password\":\"admin123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/api/auth/login",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Register",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"user8@example.com\",\n    \"name\": \"User8\",\n    \"surname\": \"System\",\n    \"password\": \"user1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/api/auth/register",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Subscription Service",
+      "item": [
+        {
+          "name": "Subscriptions (Admin)",
+          "item": [
+            {
+              "name": "Search Subscriptions",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3Nzg0NDkyNzAsImV4cCI6MTc3ODUzNTY3MH0.m6Fjwh3aiUSXsNq21UpUbveXiSQOXhPpo6t4RL5LewYedVSk7Xq1-nZzD2Mvx6CyRIcw4pBnwiURJV5oF6tKeQ\"",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/api/admin/subscriptions",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "subscriptions"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "4",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Subscription",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3Nzg0MjM1ODAsImV4cCI6MTc3ODUwOTk4MH0.JR8KPHRtstTlVjLJzqX8Hg4IRcSgZ8SnOweF-mbei1aSiV3y-On6tevuTUPA3gdDZYcfvXpSO-Rs_8lrFLpijw",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"status\":\"ACTIVE\",\n    \"startDate\":\"2026-05-10T14:12:33.050962Z\",\n    \"endDate\":\"2026-02-05T14:13:33.050962Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/api/admin/subscriptions/4",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "subscriptions",
+                    "4"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Subscription",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3Nzg0MzIzMDQsImV4cCI6MTc3ODUxODcwNH0.XgLHM_9o4A1LlmlrEoXNxInmqZvufNeYItXbYrcK8UgqTuI5M-6edA5uyn1VONs14WpzZ9xDGtMLVeeF7KFXjA",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/api/admin/subscriptions/8",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "subscriptions",
+                    "8"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Cancel Subscription",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3Nzg0MzkwNzcsImV4cCI6MTc3ODUyNTQ3N30.wTpuDdEbNRpSFf79Su7VA1ur0ajkHG4ocBayrBlvsRVbKHYDBwizfFtU2rM6ligYnlPO3DFHGzYMCsTE_NM7Ng",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/api/admin/subscriptions/4/cancel",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "subscriptions",
+                    "4",
+                    "cancel"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Reactivate Subscription",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3Nzg0MzIzMDQsImV4cCI6MTc3ODUxODcwNH0.XgLHM_9o4A1LlmlrEoXNxInmqZvufNeYItXbYrcK8UgqTuI5M-6edA5uyn1VONs14WpzZ9xDGtMLVeeF7KFXjA",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/api/admin/subscriptions/6/reactivate",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "subscriptions",
+                    "6",
+                    "reactivate"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Subscriptions",
+          "item": [
+            {
+              "name": "Subscribe",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc3ODQ2MTcwNiwiZXhwIjoxNzc4NTQ4MTA2fQ.irhBURX0teegAeXzVkYvjpYVMXggbE1Ep80dAMxTzTfm-drwN-_X27qxqiA_F9T3_amorOvYmZbKnf81pvK7yA",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/api/subscriptions",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "subscriptions"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Retry Payment",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0Iiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc3ODQyMzUyNCwiZXhwIjoxNzc4NTA5OTI0fQ.WPY02lH4jpgzaN67wGAgYwZlUnkYCeJI1a6xkf7ICpApsD73g4utNfphn7QLj7Tx4_3ma4eEeZnULUWcXAxSmQ",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/api/subscriptions/retry",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "subscriptions",
+                    "retry"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Subscriptions",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc3ODQ2MTcwNiwiZXhwIjoxNzc4NTQ4MTA2fQ.irhBURX0teegAeXzVkYvjpYVMXggbE1Ep80dAMxTzTfm-drwN-_X27qxqiA_F9T3_amorOvYmZbKnf81pvK7yA",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/api/subscriptions",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "subscriptions"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Cancel Subscription",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3Iiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc3ODQzODc4MCwiZXhwIjoxNzc4NTI1MTgwfQ.2ZRmJBCMinJ-GuIknH1yZWwyW2CZo4uRm4BM3lZW0fAZGTzoyQu03nzU8cUR4OORaozGZXzLLTJvtm0e2Q1rTg",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/api/subscriptions/cancel",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "subscriptions",
+                    "cancel"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Reactivate Subscription",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0Iiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc3ODQyMzUyNCwiZXhwIjoxNzc4NTA5OTI0fQ.WPY02lH4jpgzaN67wGAgYwZlUnkYCeJI1a6xkf7ICpApsD73g4utNfphn7QLj7Tx4_3ma4eEeZnULUWcXAxSmQ",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/api/subscriptions/reactivate",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "subscriptions",
+                    "reactivate"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Payment Service",
+      "item": [
+        {
+          "name": "Payments (Admin)",
+          "item": [
+            {
+              "name": "Get Transactions",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3Nzg0NTY1MjgsImV4cCI6MTc3ODU0MjkyOH0.sBBHFsuDvI4psrHOUri4uRftjiXDgx9ZZY2ezUEfxb1ZGA0arweURqgQeVgb18vzZHvTGMTM8Bj_IGOQsW5XCQ",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/api/admin/payments/transactions",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "payments",
+                    "transactions"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "3",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "COMPLETED",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "2026-05-12",
+                      "type": "text",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Payments",
+          "item": [
+            {
+              "name": "Add Payment Method",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc3ODQ2MTcwNiwiZXhwIjoxNzc4NTQ4MTA2fQ.irhBURX0teegAeXzVkYvjpYVMXggbE1Ep80dAMxTzTfm-drwN-_X27qxqiA_F9T3_amorOvYmZbKnf81pvK7yA",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"gatewayToken\": \"a4!71t4\",\n    \"lastFour\": \"1616\",\n    \"brand\": \"ING Bank\",\n    \"isDefault\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/api/payments/methods",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "payments",
+                    "methods"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Payment Methods",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0Iiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc3ODQzMjUyMiwiZXhwIjoxNzc4NTE4OTIyfQ.D8LLw5I9h_SbWrgoUxDZ1u4M5FaNPI84aXMWXcfczFn22eEi8P-ISulPO35TPC4s37ilsgwTlGMg3rKCgrxBiw",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/api/payments/methods",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "payments",
+                    "methods"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Payment Method",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3Nzg0MzIzMDQsImV4cCI6MTc3ODUxODcwNH0.XgLHM_9o4A1LlmlrEoXNxInmqZvufNeYItXbYrcK8UgqTuI5M-6edA5uyn1VONs14WpzZ9xDGtMLVeeF7KFXjA",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/api/admin/subscriptions/cache",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "subscriptions",
+                    "cache"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Transactions",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc3ODQ2MTcwNiwiZXhwIjoxNzc4NTQ4MTA2fQ.irhBURX0teegAeXzVkYvjpYVMXggbE1Ep80dAMxTzTfm-drwN-_X27qxqiA_F9T3_amorOvYmZbKnf81pvK7yA",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/api/payments/transactions",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "payments",
+                    "transactions"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Notification Service",
+      "item": [
+        {
+          "name": "Search Notifications",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3Nzg0NTY1MjgsImV4cCI6MTc3ODU0MjkyOH0.sBBHFsuDvI4psrHOUri4uRftjiXDgx9ZZY2ezUEfxb1ZGA0arweURqgQeVgb18vzZHvTGMTM8Bj_IGOQsW5XCQ",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/admin/notifications",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "admin",
+                "notifications"
+              ],
+              "query": [
+                {
+                  "key": "eventId",
+                  "value": "4",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
